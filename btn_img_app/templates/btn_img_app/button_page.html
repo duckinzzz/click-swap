@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Button page</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}" type="text/css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}" >
+</head>
+<body>
+
+
+<p>
+    <button id="updateButton">Обновить картинку</button>
+</p>
+
+<div id="messages"></div>
+
+<script type="text/javascript">
+    let url = `ws://127.0.0.1:8000/ws/socket-server/`
+
+    const chatSocket = new WebSocket(url)
+
+    chatSocket.onmessage = function (e) {
+        let data = JSON.parse(e.data)
+        console.log('Data:', data)
+    }
+    let updateButton = document.getElementById('updateButton');
+    updateButton.addEventListener('click', () => {
+        chatSocket.send(JSON.stringify({
+            'type': 'update_image',
+        }));
+    });
+</script>
+</body>
+</html>
